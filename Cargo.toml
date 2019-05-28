@@ -1,0 +1,8 @@
+[package]
+name = "copyrightfiles"
+version = "0.1.0"
+authors = ["jordins <jordi.nistal@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+mktemp = "0.4.0"
