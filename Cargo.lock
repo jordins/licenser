@@ -19,14 +19,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "copyrightfiles"
-version = "0.1.0"
-dependencies = [
- "mktemp 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "walkdir 2.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
 name = "fuchsia-cprng"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -35,6 +27,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 name = "libc"
 version = "0.2.55"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "licenser"
+version = "0.1.0"
+dependencies = [
+ "mktemp 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "walkdir 2.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "mktemp"

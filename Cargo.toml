@@ -1,5 +1,5 @@
 [package]
-name = "copyrightfiles"
+name = "licenser"
 version = "0.1.0"
 authors = ["jordins <jordi.nistal@gmail.com>"]
 edition = "2018"
