@@ -1,3 +1,3 @@
 fn main() {
-    copyrightfiles::append("This is my new content\n", "./test/test-input-data");
+    copyrightfiles::prepend("This is my new content\n", "./test/test-input-data");
 }
