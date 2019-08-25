@@ -26,13 +26,13 @@ mod test {
 
     #[test]
     fn list_files_should_not_list_directories() {
-        let files: Vec<String> = list_files(String::from("./test/test-input-data"));
+        let files: Vec<String> = list_files(String::from("./test/initial"));
         assert_eq!(
             files,
             [
-                "./test/test-input-data/subfolder/cleanfile.3.txt",
-                "./test/test-input-data/cleanfile.2.txt",
-                "./test/test-input-data/cleanfile.txt"
+                "./test/initial/subfolder/cleanfile.3.txt",
+                "./test/initial/cleanfile.2.txt",
+                "./test/initial/cleanfile.txt"
             ]
         );
     }
