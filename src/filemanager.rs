@@ -1,3 +1,4 @@
+use std::fs;
 use walkdir::{DirEntry, WalkDir};
 
 pub fn list_files(in_dir: String) -> Vec<String> {
@@ -14,6 +15,14 @@ pub fn list_files(in_dir: String) -> Vec<String> {
         };
     }
     files
+}
+
+pub fn are_files_equal(file_path1: &str, file_path2: &str) -> bool {
+    let contents1 = fs::read_to_string(file_path1)
+        .unwrap_or_else(|_| panic!("Could not read file {}", file_path1));
+    let contents2 = fs::read_to_string(file_path2)
+        .unwrap_or_else(|_| panic!("Could not read file {}", file_path2));
+    return contents1 == contents2;
 }
 
 fn is_directory(dir_entry: &DirEntry) -> bool {
@@ -36,4 +45,21 @@ mod test {
             ]
         );
     }
+
+    #[test]
+    fn are_files_equal_should_return_true_when_equal() {
+        let file_path1 = "test/initial/cleanfile.txt";
+        let file_path2 = "test/initial/subfolder/cleanfile.3.txt";
+        let equal = are_files_equal(file_path1, file_path2);
+        assert_eq!(equal, true);
+    }
+
+    #[test]
+    fn are_files_equal_should_return_false_when_different_content() {
+        let file_path1 = "test/initial/cleanfile.txt";
+        let file_path2 = "test/test-license-file.txt";
+        let equal = are_files_equal(file_path1, file_path2);
+        assert_eq!(equal, false);
+    }
+
 }
