@@ -3,7 +3,7 @@ pub mod filemanager;
 pub mod prepender;
 
 pub fn prepend(content: &str, folder: &str) {
-    let files_to_modify = filemanager::list_files(folder.to_string());
+    let files_to_modify = filemanager::list_files(&folder);
     for file in files_to_modify {
         println!("Going to prepend content to {}", file);
 
@@ -37,7 +37,7 @@ mod test {
         prepend_from_license_file(license_file_path, &tmp_folder);
 
         let mut files_equal = true;
-        let initial_files = filemanager::list_files(tmp_folder.to_string());
+        let initial_files = filemanager::list_files(&tmp_folder);
         for initial_file in initial_files {
             let expected_file = initial_file
                 .replace(tmp_folder, expected_folder)

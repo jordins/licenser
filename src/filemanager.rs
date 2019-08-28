@@ -1,7 +1,7 @@
 use std::fs;
 use walkdir::{DirEntry, WalkDir};
 
-pub fn list_files(in_dir: String) -> Vec<String> {
+pub fn list_files(in_dir: &str) -> Vec<String> {
     let mut files: Vec<String> = Vec::new();
     for entry in WalkDir::new(in_dir) {
         match entry {
@@ -35,7 +35,7 @@ mod test {
 
     #[test]
     fn list_files_should_not_list_directories() {
-        let files: Vec<String> = list_files(String::from("./test/initial"));
+        let files: Vec<String> = list_files("./test/initial");
         assert_eq!(
             files,
             [
