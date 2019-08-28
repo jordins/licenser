@@ -1,6 +1,7 @@
 use std::{fs, process};
 pub mod filemanager;
 pub mod prepender;
+pub mod fileheader;
 
 pub fn prepend(content: &str, folder: &str) {
     let files_to_modify = filemanager::list_files(&folder);

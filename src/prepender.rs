@@ -17,13 +17,11 @@ pub fn prepend_content_to_file(
         .unwrap_or_else(|_| panic!("Could not open the file {}", file_path_name));
 
     // create temp file
-    let temp_path =
-        Temp::new_file().unwrap_or_else(|_| panic!("Could not create a temporary file"));
+    let temp_path = Temp::new_file()?;
 
     let mut temp_file_to_write = OpenOptions::new()
         .write(true)
-        .open(&temp_path)
-        .unwrap_or_else(|_| panic!("Could not open a temporary file to write"));
+        .open(&temp_path)?;
 
     temp_file_to_write
         .write_all(content_to_prepend.as_bytes())
