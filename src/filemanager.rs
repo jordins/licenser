@@ -39,24 +39,24 @@ mod test {
         assert_eq!(
             files,
             [
-                "./test/initial/subfolder/cleanfile.3.txt",
-                "./test/initial/cleanfile.2.txt",
-                "./test/initial/cleanfile.txt"
+                "./test/initial/file.txt",
+                "./test/initial/subfolder/file.3.txt",
+                "./test/initial/file.2.txt",
             ]
         );
     }
 
     #[test]
     fn are_files_equal_should_return_true_when_equal() {
-        let file_path1 = "test/initial/cleanfile.txt";
-        let file_path2 = "test/initial/subfolder/cleanfile.3.txt";
+        let file_path1 = "test/initial/file.txt";
+        let file_path2 = "test/initial/subfolder/file.3.txt";
         let equal = are_files_equal(file_path1, file_path2);
         assert_eq!(equal, true);
     }
 
     #[test]
     fn are_files_equal_should_return_false_when_different_content() {
-        let file_path1 = "test/initial/cleanfile.txt";
+        let file_path1 = "test/initial/file.txt";
         let file_path2 = "test/test-license-file.txt";
         let equal = are_files_equal(file_path1, file_path2);
         assert_eq!(equal, false);

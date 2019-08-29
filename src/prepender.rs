@@ -19,9 +19,7 @@ pub fn prepend_content_to_file(
     // create temp file
     let temp_path = Temp::new_file()?;
 
-    let mut temp_file_to_write = OpenOptions::new()
-        .write(true)
-        .open(&temp_path)?;
+    let mut temp_file_to_write = OpenOptions::new().write(true).open(&temp_path)?;
 
     temp_file_to_write
         .write_all(content_to_prepend.as_bytes())
@@ -53,7 +51,7 @@ mod test {
 
     #[test]
     fn prepends_properly_a_file() {
-        let file_path_name = "./test/cleanfile2.txt";
+        let file_path_name = "./test/file2.txt";
         let original_file_contents = "1\n2\n3\nend of file!";
         create_test_file(&file_path_name, &original_file_contents);
 
