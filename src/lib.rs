@@ -1,17 +1,28 @@
 use std::{fs, process};
+pub mod fileheader;
 pub mod filemanager;
 pub mod prepender;
-pub mod fileheader;
 
-pub fn prepend(content: &str, folder: &str) {
+pub fn prepend(license_content: &str, folder: &str) {
     let files_to_modify = filemanager::list_files(&folder);
     for file in files_to_modify {
         println!("Going to prepend content to {}", file);
-
-        if let Err(e) = prepender::prepend_content_to_file(content, &file) {
-            println!("Application error: {}", e);
-
-            process::exit(1);
+        match filemanager::get_extension_from_file_path(file.as_str()) {
+            Some(file_extension) => {
+                let comented_file_header =
+                    fileheader::FileHeader::new(license_content, file_extension)
+                        .add_comments_to_content();
+                if let Err(e) =
+                    prepender::prepend_content_to_file(comented_file_header.content(), &file)
+                {
+                    println!("Application error: {}", e);
+                    process::exit(1);
+                }
+            }
+            None => println!(
+                "Can't get extension for file {}, so won't add any licence to it",
+                file
+            ),
         }
     }
 }
@@ -38,13 +49,18 @@ mod test {
         prepend_from_license_file(license_file_path, &tmp_folder);
 
         let mut files_equal = true;
-        let initial_files = filemanager::list_files(&tmp_folder);
-        for initial_file in initial_files {
-            let expected_file = initial_file
+        let test_files = filemanager::list_files(&tmp_folder);
+        for test_file in test_files {
+            let expected_file = test_file
                 .replace(tmp_folder, expected_folder)
                 .replace("initial", "");
-            files_equal = filemanager::are_files_equal(&initial_file, &expected_file);
+            files_equal = filemanager::are_files_equal(&test_file, &expected_file);
             if !files_equal {
+                println!(
+                    "This file is different: {} with content:\n{}",
+                    &test_file,
+                    fs::read_to_string(&test_file).unwrap()
+                );
                 break;
             }
         }

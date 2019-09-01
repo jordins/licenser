@@ -4,14 +4,24 @@ pub struct FileHeader {
 }
 
 impl FileHeader {
+    pub fn new(content: &str, fileextension: &str) -> FileHeader {
+        FileHeader {
+            content: String::from(content),
+            fileextension: String::from(fileextension),
+        }
+    }
+
+    pub fn content(&self) -> &String {
+        &self.content
+    }
+
     pub fn add_comments_to_content(&self) -> FileHeader {
         let comment = get_comment_from_extension(self.fileextension.as_str());
-
         let commented_content = if self.is_multiline_content()
             && !comment.start.is_empty()
             && !comment.end.is_empty()
         {
-            comment.start + &self.content + &comment.end
+            comment.start + "\n" + &self.content + &comment.end + "\n"
         } else {
             let next_line_commented = String::from("\n") + &comment.line;
             comment.line + &self.content.replace("\n", next_line_commented.as_str())
@@ -21,6 +31,20 @@ impl FileHeader {
             fileextension: String::from(&self.fileextension),
         };
     }
+
+    // fn has_shebangs(&self) -> bool {
+    //     let shebangs = vec![
+    //         "#!",        // shell script
+    //         "<?xml",     // XML declaration
+    //         "<!doctype", // HTML doctype
+    //     ];
+    //     for shebang in shebangs {
+    //         if self.content.contains(shebang) {
+    //             return true;
+    //         }
+    //     }
+    //     false
+    // }
 
     fn is_multiline_content(&self) -> bool {
         return self.content.contains("\n");
@@ -35,18 +59,16 @@ struct Comment {
 
 fn get_comment_from_extension(extension: &str) -> Comment {
     match extension {
-        ".js" | ".jsx" | ".ts" | ".tsx" | ".css" | ".tf" => Comment {
+        "js" | "jsx" | "ts" | "tsx" | "css" | "tf" => Comment {
             start: String::from("/*"),
             end: String::from("*/"),
             line: String::from("//"),
         },
-        ".py" | ".sh" | ".yaml" | ".yml" | ".dockerfile" | "dockerfile" | ".rb" | "gemfile" => {
-            Comment {
-                start: String::from(""),
-                end: String::from(""),
-                line: String::from("# "),
-            }
-        }
+        "py" | "sh" | "yaml" | "yml" | "dockerfile" | "rb" | "gemfile" => Comment {
+            start: String::from(""),
+            end: String::from(""),
+            line: String::from("# "),
+        },
         _ => Comment {
             start: String::from(""),
             end: String::from(""),
@@ -63,7 +85,7 @@ mod test {
     fn add_comments_to_content_returns_a_commented_content_in_js() {
         let file_header = FileHeader {
             content: String::from("my content"),
-            fileextension: String::from(".js"),
+            fileextension: String::from("js"),
         };
         let new_struct: FileHeader = file_header.add_comments_to_content();
         assert_eq!(new_struct.content, "//my content");
@@ -83,12 +105,12 @@ mod test {
     fn add_comments_to_multiline_content_in_js() {
         let file_header = FileHeader {
             content: String::from("my content\nmy new line\nAnother line"),
-            fileextension: String::from(".js"),
+            fileextension: String::from("js"),
         };
         let new_struct: FileHeader = file_header.add_comments_to_content();
         assert_eq!(
             new_struct.content,
-            "/*my content\nmy new line\nAnother line*/"
+            "/*\nmy content\nmy new line\nAnother line*/\n"
         );
     }
 
@@ -96,7 +118,7 @@ mod test {
     fn add_comments_to_multiline_content_in_bash() {
         let file_header = FileHeader {
             content: String::from("my content\nmy new line\nAnother line"),
-            fileextension: String::from(".sh"),
+            fileextension: String::from("sh"),
         };
         let new_struct: FileHeader = file_header.add_comments_to_content();
         assert_eq!(
@@ -104,4 +126,24 @@ mod test {
             "# my content\n# my new line\n# Another line"
         );
     }
+
+    // #[test]
+    // fn has_shebangs_returns_true_if_text_contains_shebang() {
+    //     assert!(FileHeader {
+    //         content: String::from("#!/bin/bash\necho hello"),
+    //         fileextension: String::from("sh"),
+    //     }
+    //     .has_shebangs());
+    // }
+    // #[test]
+    // fn has_shebangs_returns_false_if_text_contains_shebang() {
+    //     assert_eq!(
+    //         FileHeader {
+    //             content: String::from("echo hello"),
+    //             fileextension: String::from("sh"),
+    //         }
+    //         .has_shebangs(),
+    //         false
+    //     );
+    // }
 }

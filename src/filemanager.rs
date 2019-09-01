@@ -1,4 +1,6 @@
+use std::ffi::OsStr;
 use std::fs;
+use std::path::Path;
 use walkdir::{DirEntry, WalkDir};
 
 pub fn list_files(in_dir: &str) -> Vec<String> {
@@ -25,6 +27,10 @@ pub fn are_files_equal(file_path1: &str, file_path2: &str) -> bool {
     return contents1 == contents2;
 }
 
+pub fn get_extension_from_file_path(file_path: &str) -> Option<&str> {
+    Path::new(file_path).extension().and_then(OsStr::to_str)
+}
+
 fn is_directory(dir_entry: &DirEntry) -> bool {
     return dir_entry.path().is_dir();
 }
@@ -41,7 +47,9 @@ mod test {
             [
                 "./test/initial/file.txt",
                 "./test/initial/subfolder/file.3.txt",
+                "./test/initial/no-extension-file",
                 "./test/initial/file.2.txt",
+                "./test/initial/file.js"
             ]
         );
     }
@@ -62,4 +70,11 @@ mod test {
         assert_eq!(equal, false);
     }
 
+    #[test]
+    fn get_extension_from_file_path_should_return_the_extension() {
+        assert_eq!(
+            get_extension_from_file_path("test/test-license-file.txt"),
+            Some("txt")
+        );
+    }
 }
