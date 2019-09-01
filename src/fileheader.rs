@@ -59,7 +59,7 @@ struct Comment {
 
 fn get_comment_from_extension(extension: &str) -> Comment {
     match extension {
-        "js" | "jsx" | "ts" | "tsx" | "css" | "tf" => Comment {
+        "js" | "jsx" | "ts" | "tsx" | "java" | "go" | "rs" | "css" | "tf" => Comment {
             start: String::from("/*"),
             end: String::from("*/"),
             line: String::from("//"),
@@ -68,6 +68,11 @@ fn get_comment_from_extension(extension: &str) -> Comment {
             start: String::from(""),
             end: String::from(""),
             line: String::from("# "),
+        },
+        "html" | "xml" => Comment {
+            start: String::from("<!--"),
+            end: String::from("-->"),
+            line: String::from(""),
         },
         _ => Comment {
             start: String::from(""),

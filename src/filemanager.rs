@@ -49,7 +49,10 @@ mod test {
                 "./test/initial/subfolder/file.3.txt",
                 "./test/initial/no-extension-file",
                 "./test/initial/file.2.txt",
-                "./test/initial/file.js"
+                "./test/initial/file.html",
+                "./test/initial/file.go",
+                "./test/initial/file.js",
+                "./test/initial/file.rs"
             ]
         );
     }
