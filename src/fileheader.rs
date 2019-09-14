@@ -32,20 +32,6 @@ impl FileHeader {
         };
     }
 
-    // fn has_shebangs(&self) -> bool {
-    //     let shebangs = vec![
-    //         "#!",        // shell script
-    //         "<?xml",     // XML declaration
-    //         "<!doctype", // HTML doctype
-    //     ];
-    //     for shebang in shebangs {
-    //         if self.content.contains(shebang) {
-    //             return true;
-    //         }
-    //     }
-    //     false
-    // }
-
     fn is_multiline_content(&self) -> bool {
         return self.content.contains("\n");
     }
@@ -132,23 +118,4 @@ mod test {
         );
     }
 
-    // #[test]
-    // fn has_shebangs_returns_true_if_text_contains_shebang() {
-    //     assert!(FileHeader {
-    //         content: String::from("#!/bin/bash\necho hello"),
-    //         fileextension: String::from("sh"),
-    //     }
-    //     .has_shebangs());
-    // }
-    // #[test]
-    // fn has_shebangs_returns_false_if_text_contains_shebang() {
-    //     assert_eq!(
-    //         FileHeader {
-    //             content: String::from("echo hello"),
-    //             fileextension: String::from("sh"),
-    //         }
-    //         .has_shebangs(),
-    //         false
-    //     );
-    // }
 }
