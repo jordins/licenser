@@ -25,5 +25,5 @@ fn main() {
     let licensefile = matches.value_of("licensefile").unwrap();
     println!("Value for licensefile: {}", licensefile);
 
-    licenser::prepend("This is my new content\n", folder);
+    licenser::prepend_from_license_file(licensefile, folder);
 }
