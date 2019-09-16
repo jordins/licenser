@@ -1,43 +1,43 @@
 pub struct FileHeader {
-    content: String,
+    license: String,
     fileextension: String,
 }
 
 impl FileHeader {
-    pub fn new(content: &str, fileextension: &str) -> FileHeader {
+    pub fn new(license: &str, fileextension: &str) -> FileHeader {
         FileHeader {
-            content: String::from(content),
+            license: String::from(license),
             fileextension: String::from(fileextension),
         }
     }
 
-    pub fn content(&self) -> &String {
-        &self.content
+    pub fn license(&self) -> &String {
+        &self.license
     }
 
-    pub fn add_comments_to_content(&self) -> FileHeader {
+    pub fn add_comments_to_license(&self) -> FileHeader {
         let comment = get_comment_from_extension(self.fileextension.as_str());
         let commented_license = self.add_comment_symbol_to_each_line_of_license(comment);
         return FileHeader {
-            content: commented_license,
+            license: commented_license,
             fileextension: String::from(&self.fileextension),
         };
     }
 
-    fn is_multiline_content(&self) -> bool {
-        return self.content.contains("\n");
+    fn is_multiline_license(&self) -> bool {
+        return self.license.contains("\n");
     }
 
     fn add_comment_symbol_to_each_line_of_license(&self, comment: Comment) -> String {
         let mut commented_license: String;
 
-        commented_license = if self.is_multiline_content()
+        commented_license = if self.is_multiline_license()
             && !comment.start.is_empty()
             && !comment.end.is_empty()
         {
-            comment.start + "\n" + &self.content + &comment.end + "\n"
+            comment.start + "\n" + &self.license + &comment.end + "\n"
         } else {
-            self.content
+            self.license
                 .lines()
                 .enumerate()
                 .map(|(i, line)| {
@@ -88,48 +88,48 @@ mod test {
     use super::*;
 
     #[test]
-    fn add_comments_to_content_returns_a_commented_content_in_js() {
+    fn add_comments_to_license_returns_a_commented_license_in_js() {
         let file_header = FileHeader {
-            content: String::from("my content"),
+            license: String::from("my license"),
             fileextension: String::from("js"),
         };
-        let new_struct: FileHeader = file_header.add_comments_to_content();
-        assert_eq!(new_struct.content, "//my content");
+        let new_struct: FileHeader = file_header.add_comments_to_license();
+        assert_eq!(new_struct.license, "//my license");
     }
 
     #[test]
-    fn add_comments_to_content_returns_same_content_if_not_recognised_extension() {
+    fn add_comments_to_license_returns_same_license_if_not_recognised_extension() {
         let file_header = FileHeader {
-            content: String::from("my content"),
+            license: String::from("my license"),
             fileextension: String::from("unknown_extension"),
         };
-        let new_struct: FileHeader = file_header.add_comments_to_content();
-        assert_eq!(new_struct.content, "my content");
+        let new_struct: FileHeader = file_header.add_comments_to_license();
+        assert_eq!(new_struct.license, "my license");
     }
 
     #[test]
-    fn add_comments_to_multiline_content_in_js() {
+    fn add_comments_to_multiline_license_in_js() {
         let file_header = FileHeader {
-            content: String::from("my content\nmy new line\nAnother line"),
+            license: String::from("my license\nmy new line\nAnother line"),
             fileextension: String::from("js"),
         };
-        let new_struct: FileHeader = file_header.add_comments_to_content();
+        let new_struct: FileHeader = file_header.add_comments_to_license();
         assert_eq!(
-            new_struct.content,
-            "/*\nmy content\nmy new line\nAnother line*/\n"
+            new_struct.license,
+            "/*\nmy license\nmy new line\nAnother line*/\n"
         );
     }
 
     #[test]
-    fn add_comments_to_multiline_content_in_bash() {
+    fn add_comments_to_multiline_license_in_bash() {
         let file_header = FileHeader {
-            content: String::from("my content\nmy new line\nAnother line"),
+            license: String::from("my license\nmy new line\nAnother line"),
             fileextension: String::from("sh"),
         };
-        let new_struct: FileHeader = file_header.add_comments_to_content();
+        let new_struct: FileHeader = file_header.add_comments_to_license();
         assert_eq!(
-            new_struct.content,
-            "# my content\n# my new line\n# Another line"
+            new_struct.license,
+            "# my license\n# my new line\n# Another line"
         );
     }
 

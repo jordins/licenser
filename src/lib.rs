@@ -6,14 +6,14 @@ pub mod prepender;
 pub fn prepend(license_content: &str, folder: &str) {
     let files_to_modify = filemanager::list_files(&folder);
     for file in files_to_modify {
-        println!("Going to prepend content to {}", file);
+        println!("Going to prepend license to {}", file);
         match filemanager::get_extension_from_file_path(file.as_str()) {
             Some(file_extension) => {
                 let comented_file_header =
                     fileheader::FileHeader::new(license_content, file_extension)
-                        .add_comments_to_content();
+                        .add_comments_to_license();
                 if let Err(e) =
-                    prepender::prepend_content_to_file(comented_file_header.content(), &file)
+                    prepender::prepend_content_to_file(comented_file_header.license(), &file)
                 {
                     println!("Application error: {}", e);
                     process::exit(1);
