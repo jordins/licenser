@@ -46,6 +46,7 @@ mod test {
             files,
             [
                 "./test/initial/file.txt",
+                "./test/initial/file.sh",
                 "./test/initial/subfolder/file.3.txt",
                 "./test/initial/no-extension-file",
                 "./test/initial/file.2.txt",

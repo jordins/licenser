@@ -17,23 +17,38 @@ impl FileHeader {
 
     pub fn add_comments_to_content(&self) -> FileHeader {
         let comment = get_comment_from_extension(self.fileextension.as_str());
-        let commented_content = if self.is_multiline_content()
-            && !comment.start.is_empty()
-            && !comment.end.is_empty()
-        {
-            comment.start + "\n" + &self.content + &comment.end + "\n"
-        } else {
-            let next_line_commented = String::from("\n") + &comment.line;
-            comment.line + &self.content.replace("\n", next_line_commented.as_str())
-        };
+        let commented_license = self.add_comment_symbol_to_each_line_of_license(comment);
         return FileHeader {
-            content: commented_content,
+            content: commented_license,
             fileextension: String::from(&self.fileextension),
         };
     }
 
     fn is_multiline_content(&self) -> bool {
         return self.content.contains("\n");
+    }
+
+    fn add_comment_symbol_to_each_line_of_license(&self, comment: Comment) -> String {
+        let mut commented_license: String;
+
+        commented_license = if self.is_multiline_content()
+            && !comment.start.is_empty()
+            && !comment.end.is_empty()
+        {
+            comment.start + "\n" + &self.content + &comment.end + "\n"
+        } else {
+            self.content
+                .lines()
+                .enumerate()
+                .map(|(i, line)| {
+                    if i != 0 {
+                        return String::from("\n") + &comment.line + line;
+                    }
+                    return String::from(&comment.line) + line;
+                })
+                .collect()
+        };
+        commented_license
     }
 }
 
