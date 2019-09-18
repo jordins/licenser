@@ -29,7 +29,7 @@ impl FileHeader {
     }
 
     fn add_comment_symbol_to_each_line_of_license(&self, comment: Comment) -> String {
-        let mut commented_license: String;
+        let commented_license: String;
 
         commented_license = if self.is_multiline_license()
             && !comment.start.is_empty()
