@@ -48,12 +48,12 @@ fn get_shebang_and_license(line: &str, license: &str) -> String {
         shebang_and_licese.push_str("\n");
         shebang_and_licese.push_str(license);
         shebang_and_licese.push_str("\n");
-        return shebang_and_licese.to_owned();
+        shebang_and_licese.to_owned()
     } else {
         let mut license_and_firstline = license.to_owned();
         license_and_firstline.push_str("\n");
         license_and_firstline.push_str(&line);
-        return license_and_firstline.to_owned();
+        license_and_firstline.to_owned()
     }
 }
 

@@ -18,14 +18,14 @@ impl FileHeader {
     pub fn add_comments_to_license(&self) -> FileHeader {
         let comment = get_comment_from_extension(self.fileextension.as_str());
         let commented_license = self.add_comment_symbol_to_each_line_of_license(comment);
-        return FileHeader {
+        FileHeader {
             license: commented_license,
             fileextension: String::from(&self.fileextension),
-        };
+        }
     }
 
     fn is_multiline_license(&self) -> bool {
-        return self.license.contains("\n");
+        self.license.contains('\n')
     }
 
     fn add_comment_symbol_to_each_line_of_license(&self, comment: Comment) -> String {
@@ -44,7 +44,7 @@ impl FileHeader {
                     if i != 0 {
                         return String::from("\n") + &comment.line + line;
                     }
-                    return String::from(&comment.line) + line;
+                    String::from(&comment.line) + line
                 })
                 .collect()
         };

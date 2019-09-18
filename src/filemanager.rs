@@ -24,7 +24,7 @@ pub fn are_files_equal(file_path1: &str, file_path2: &str) -> bool {
         .unwrap_or_else(|_| panic!("Could not read file {}", file_path1));
     let contents2 = fs::read_to_string(file_path2)
         .unwrap_or_else(|_| panic!("Could not read file {}", file_path2));
-    return contents1 == contents2;
+    contents1 == contents2
 }
 
 pub fn get_extension_from_file_path(file_path: &str) -> Option<&str> {
@@ -32,7 +32,7 @@ pub fn get_extension_from_file_path(file_path: &str) -> Option<&str> {
 }
 
 fn is_directory(dir_entry: &DirEntry) -> bool {
-    return dir_entry.path().is_dir();
+    dir_entry.path().is_dir()
 }
 
 #[cfg(test)]

@@ -4,6 +4,10 @@ pub mod filemanager;
 pub mod prepender;
 
 pub fn prepend(license_content: &str, folder: &str) {
+    //! # Licenser
+    //!
+    //! `my_crate` is a collection of utilities to make performing certain
+    //! calculations more convenient.
     let files_to_modify = filemanager::list_files(&folder);
     for file in files_to_modify {
         println!("Going to prepend license to {}", file);
