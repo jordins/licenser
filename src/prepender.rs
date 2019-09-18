@@ -44,16 +44,9 @@ pub fn prepend_content_to_file(
 
 fn get_shebang_and_license(line: &str, license: &str) -> String {
     if has_shebangs(&line) {
-        let mut shebang_and_licese = line.to_owned();
-        shebang_and_licese.push_str("\n");
-        shebang_and_licese.push_str(license);
-        shebang_and_licese.push_str("\n");
-        shebang_and_licese.to_owned()
+        format!("{0}{1}{2}{1}", line.to_owned(), "\n", license)
     } else {
-        let mut license_and_firstline = license.to_owned();
-        license_and_firstline.push_str("\n");
-        license_and_firstline.push_str(&line);
-        license_and_firstline.to_owned()
+        format!("{}{}{}", license.to_owned(), "\n", &line)
     }
 }
 
@@ -82,9 +75,8 @@ mod test {
         create_test_file(&file_path_name, &original_file_contents);
 
         let content_to_prepend = "This is my prepended content";
-        let mut expected_file_content = String::from(content_to_prepend).to_owned();
-        expected_file_content.push_str("\n");
-        expected_file_content.push_str(&original_file_contents);
+        let expected_file_content =
+            format!("{}{}{}", content_to_prepend, "\n", &original_file_contents);
 
         let result = prepend_content_to_file(content_to_prepend, &file_path_name);
         match result {
