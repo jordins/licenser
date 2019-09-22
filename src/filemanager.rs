@@ -42,7 +42,8 @@ mod test {
     #[test]
     fn list_files_should_not_list_directories() {
         let mut files: Vec<String> = list_files("./test/initial");
-        let expected = [
+        files.sort();
+        let mut expected = [
             "./test/initial/subfolder/file.3.txt",
             "./test/initial/file.rs",
             "./test/initial/file.txt",
@@ -52,9 +53,9 @@ mod test {
             "./test/initial/no-extension-file",
             "./test/initial/file.js",
             "./test/initial/file.html",
-        ]
-        .sort();
-        assert_eq!(files.sort(), expected);
+        ];
+        expected.sort();
+        assert_eq!(files, expected);
     }
 
     #[test]
