@@ -4,7 +4,7 @@ Licenser is a tool to add a license header to all project files recursively.
 
 You can run it like this:
 ```
-cargo run -- -f /path/to/my/project/folder -l /path/to/my/licensefile
+cargo run -- -f /path/to/my/project/folder -l /path/to/my/licensefile -i /path/to/my/project/ignoredfolder1 /path/to/my/project/ignoredfolder2
 ````
 
 This will add the contents of `licensefile` to the beginning of each file
@@ -15,7 +15,11 @@ It supports several languages and file extensions like: `go`, `bash`, `rust`, `j
 
 It also takes care of shebangs ;)
 
-For help run:
+### How to ignore folders or files
+By passing the `-i` or `--ignorefolders` flag with a list of paths `licenser` won't add a license to them.
+At the moment the paths should not end with a `/` symbol.
+
+To see available commands run:
 ```
 cargo run -- -h
 ````
