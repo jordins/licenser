@@ -58,9 +58,8 @@ mod test {
 
     #[test]
     fn list_files_should_not_list_directories() {
-        let mut files: Vec<String> = list_files("./test/initial", &Vec::new());
-        files.sort();
-        let mut expected = [
+        let files: Vec<String> = list_files("./test/initial", &Vec::new());
+        let expected = vec![
             "./test/initial/subfolder/file.3.txt",
             "./test/initial/file.rs",
             "./test/initial/file.txt",
@@ -72,15 +71,13 @@ mod test {
             "./test/initial/file.html",
             "./test/initial/ignoreme/ignoreme.txt",
         ];
-        expected.sort();
-        assert_eq!(files, expected);
+        assert_files_equals_expected(files, expected);
     }
 
     #[test]
     fn list_files_should_not_list_files_inside_ignored_directories() {
-        let mut files: Vec<String> = list_files("./test/initial", &vec!["./test/initial/ignoreme"]);
-        files.sort();
-        let mut expected = [
+        let files: Vec<String> = list_files("./test/initial", &vec!["./test/initial/ignoreme"]);
+        let expected = vec![
             "./test/initial/subfolder/file.3.txt",
             "./test/initial/file.rs",
             "./test/initial/file.txt",
@@ -91,6 +88,11 @@ mod test {
             "./test/initial/file.js",
             "./test/initial/file.html",
         ];
+        assert_files_equals_expected(files, expected);
+    }
+
+    fn assert_files_equals_expected(mut files: Vec<String>, mut expected: Vec<&str>) {
+        files.sort();
         expected.sort();
         assert_eq!(files, expected);
     }
