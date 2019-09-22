@@ -3,12 +3,11 @@ pub mod fileheader;
 pub mod filemanager;
 pub mod prepender;
 
-pub fn prepend(license_content: &str, folder: &str) {
+pub fn prepend(license_content: &str, folder: &str, ignorefolders: &[&str]) {
     //! # Licenser
     //!
-    //! `my_crate` is a collection of utilities to make performing certain
-    //! calculations more convenient.
-    let files_to_modify = filemanager::list_files(&folder);
+    //! Licenser is a tool to add a license header to all project files recursively.
+    let files_to_modify = filemanager::list_files(&folder, &ignorefolders);
     for file in files_to_modify {
         println!("Going to prepend license to {}", file);
         match filemanager::get_extension_from_file_path(file.as_str()) {
@@ -31,9 +30,9 @@ pub fn prepend(license_content: &str, folder: &str) {
     }
 }
 
-pub fn prepend_from_license_file(license_file: &str, folder: &str) {
+pub fn prepend_from_license_file(license_file: &str, folder: &str, ignorefolders: &[&str]) {
     let license_content = fs::read_to_string(license_file).unwrap();
-    prepend(&license_content, folder)
+    prepend(&license_content, folder, ignorefolders)
 }
 
 #[cfg(test)]
@@ -46,14 +45,15 @@ mod test {
         let initial_folder = "./test/initial/";
         let expected_folder = "./test/expected";
         let tmp_folder = "./test/tmp";
+        let ignoredfolders = &vec!["./test/tmp/ignoreme"];
         let mut copy_options = CopyOptions::new();
         copy_options.copy_inside = true;
         copy(initial_folder, tmp_folder, &copy_options).unwrap();
         let license_file_path = "./test/test-license-file.txt";
-        prepend_from_license_file(license_file_path, &tmp_folder);
+        prepend_from_license_file(license_file_path, &tmp_folder, ignoredfolders);
 
         let mut files_equal = true;
-        let test_files = filemanager::list_files(&tmp_folder);
+        let test_files = filemanager::list_files(&tmp_folder, ignoredfolders);
         for test_file in test_files {
             let expected_file = test_file
                 .replace(tmp_folder, expected_folder)
