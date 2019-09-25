@@ -4,10 +4,20 @@ use std::path::Path;
 use walkdir::{DirEntry, WalkDir};
 
 pub fn list_files(in_dir: &str, ignored_dirs: &[&str]) -> Vec<String> {
+    let cleaned_ignored_dirs: Vec<String> = remove_last_slash_from_path(&Vec::from(ignored_dirs));
     let mut files: Vec<String> = Vec::new();
     WalkDir::new(in_dir)
         .into_iter()
-        .filter_entry(|e| !is_ignored(e, ignored_dirs))
+        .filter_entry(|e| {
+            !is_ignored(
+                e,
+                &cleaned_ignored_dirs
+                    .as_slice()
+                    .into_iter()
+                    .map(|s| s.as_str())
+                    .collect::<Vec<&str>>(),
+            )
+        })
         .filter(|e| is_valid_file(e))
         .for_each(|entry| files.push(get_filename_from_direntry(entry)));
     files
@@ -23,6 +33,19 @@ pub fn are_files_equal(file_path1: &str, file_path2: &str) -> bool {
 
 pub fn get_extension_from_file_path(file_path: &str) -> Option<&str> {
     Path::new(file_path).extension().and_then(OsStr::to_str)
+}
+
+fn remove_last_slash_from_path<'a>(paths: &Vec<&'a str>) -> Vec<String> {
+    paths
+        .into_iter()
+        .map(|dir| {
+            let dir_owned = String::from(*dir);
+            if dir_owned.ends_with("/") {
+                return dir_owned.chars().take(dir_owned.len() - 1).collect();
+            }
+            dir_owned
+        })
+        .collect()
 }
 
 fn is_valid_file(entry: &Result<DirEntry, walkdir::Error>) -> bool {
@@ -77,6 +100,23 @@ mod test {
     #[test]
     fn list_files_should_not_list_files_inside_ignored_directories() {
         let files: Vec<String> = list_files("./test/initial", &vec!["./test/initial/ignoreme"]);
+        let expected = vec![
+            "./test/initial/subfolder/file.3.txt",
+            "./test/initial/file.rs",
+            "./test/initial/file.txt",
+            "./test/initial/file.go",
+            "./test/initial/file.2.txt",
+            "./test/initial/file.sh",
+            "./test/initial/no-extension-file",
+            "./test/initial/file.js",
+            "./test/initial/file.html",
+        ];
+        assert_files_equals_expected(files, expected);
+    }
+
+    #[test]
+    fn list_files_should_not_list_files_inside_ignored_directories_when_paths_ends_with_slash() {
+        let files: Vec<String> = list_files("./test/initial", &vec!["./test/initial/ignoreme/"]);
         let expected = vec![
             "./test/initial/subfolder/file.3.txt",
             "./test/initial/file.rs",
