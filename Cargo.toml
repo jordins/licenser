@@ -1,11 +1,5 @@
-[package]
-name = "licenser"
-version = "0.1.0"
-authors = ["jordins <jordi.nistal@gmail.com>"]
-edition = "2018"
-
-[dependencies]
-clap = "2.33.0"
-fs_extra = "1.1.0"
-mktemp = "0.4.0"
-walkdir = "2"
+[workspace]
+members = [
+    "licenser",
+    "licenser-cli"
+]
