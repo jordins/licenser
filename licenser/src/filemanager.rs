@@ -13,7 +13,7 @@ pub fn list_files(in_dir: &str, ignored_dirs: &[&str]) -> Vec<String> {
                 e,
                 &cleaned_ignored_dirs
                     .as_slice()
-                    .into_iter()
+                    .iter()
                     .map(|s| s.as_str())
                     .collect::<Vec<&str>>(),
             )
@@ -35,12 +35,12 @@ pub fn get_extension_from_file_path(file_path: &str) -> Option<&str> {
     Path::new(file_path).extension().and_then(OsStr::to_str)
 }
 
-fn remove_last_slash_from_path<'a>(paths: &Vec<&'a str>) -> Vec<String> {
+fn remove_last_slash_from_path<'a>(paths: &[&'a str]) -> Vec<String> {
     paths
-        .into_iter()
+        .iter()
         .map(|dir| {
             let dir_owned = String::from(*dir);
-            if dir_owned.ends_with("/") {
+            if dir_owned.ends_with('/') {
                 return dir_owned.chars().take(dir_owned.len() - 1).collect();
             }
             dir_owned
