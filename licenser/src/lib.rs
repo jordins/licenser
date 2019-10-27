@@ -1,12 +1,45 @@
-use std::{fs, process};
-pub mod fileheader;
-pub mod filemanager;
-pub mod prepender;
+//This is my license content
+//This is my license content
+//This is my license content
+//! # Licenser
+//!
+//! Licenser is a tool to add a license header to all project files recursively.
+//!
+//!
+//! ## Quick start
+//! To add the contents of a license file into all your project files runthread:
+//! ```
+//! use licenser::*;
+//! let license_file = "./test/test-license-file.txt";
+//! let folder = "./licenser/src";
+//! prepend_from_license_file(&license_file, &folder, &vec!["./src"]);
+//! ```
 
+use std::{fs, process};
+mod fileheader;
+mod filemanager;
+mod prepender;
+
+/// Prepends a `license` **string** recursively for each file inside the given `folder` ignoring the paths provided in `ignorefolders`
+///
+/// Each license will be prepended as a comment depending on the file type.
+///
+/// # Arguments
+///
+/// * `license_content` - A string slice that holds the license content to prepend
+/// * `folder` - A string slice that holds the folder where your project is located
+/// * `ignorefolders` - A reference to an array of string slices containing the paths you want to ignore.  
+/// These won't include any license. You might want to add here folders with dependencies, assets or similar.
+///
+/// # Example
+///
+/// ```rust
+/// use licenser::*;
+/// let license_content = "This is my license content";
+/// let folder = "./src";
+/// prepend(&license_content, &folder, &vec!["./src"]);
+/// ```
 pub fn prepend(license_content: &str, folder: &str, ignorefolders: &[&str]) {
-    //! # Licenser
-    //!
-    //! Licenser is a tool to add a license header to all project files recursively.
     let files_to_modify = filemanager::list_files(&folder, &ignorefolders);
     for file in files_to_modify {
         println!("Going to prepend license to {}", file);
@@ -30,6 +63,25 @@ pub fn prepend(license_content: &str, folder: &str, ignorefolders: &[&str]) {
     }
 }
 
+/// Prepends a `license` **file** recursively for each file inside the given `folder` ignoring the paths provided in `ignorefolders`
+///
+/// Each license will be prepended as a comment depending on the file type.
+///
+/// # Arguments
+///
+/// * `license_file` - A string slice that holds the path of the file with the license to prepend
+/// * `folder` - A string slice that holds the folder where your project is located
+/// * `ignorefolders` - A reference to an array of string slices containing the paths you want to ignore.  
+/// These won't include any license. You might want to add here folders with dependencies, assets or similar.
+///
+/// # Example
+///
+/// ```rust
+/// use licenser::*;
+/// let license_file = "./test/test-license-file.txt";
+/// let folder = "./licenser/src";
+/// prepend_from_license_file(&license_file, &folder, &vec!["./src"]);
+/// ```
 pub fn prepend_from_license_file(license_file: &str, folder: &str, ignorefolders: &[&str]) {
     let license_content = fs::read_to_string(license_file).unwrap();
     prepend(&license_content, folder, ignorefolders)
